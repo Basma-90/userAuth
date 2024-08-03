@@ -1,0 +1,39 @@
+{
+  "name": "userauth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/index.ts",
+    "build": "tsc",
+    "start": "nodemon dist/src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/nodemailer": "^6.4.15",
+    "@types/nodemon": "^1.19.6",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.12",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.2",
+    "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/config": "^3.3.4",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
+  }
+}
