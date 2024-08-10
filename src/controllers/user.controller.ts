@@ -4,26 +4,19 @@ import { verifyEmailToken } from "../utils/email.utils";
 import UserModel, { IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { sendEmail ,generateEmailToken} from "../utils/email.utils";
+import {findUser,createUser,findUserById} from "../services/user.services";
+
 
 export const register = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
     
-    let user = await UserModel.findOne({ email: email });
+    let user = await findUser(email);
     if (user) {
         return res.status(400).json({ message: "User already exists" });
     }
 
-    user = new UserModel({ name, email, password });
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    user.password = hashedPassword;
-
+    user=await createUser(name, email, password) ;
     const userId: string = (user._id) as string;
-    const refreshToken = generateRefreshToken(userId);
-    user.refreshToken = refreshToken;
-
-    await user.save();
-
     const token = generateToken(userId);
 
     res.cookie(
@@ -48,7 +41,7 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const user = await UserModel.findOne({ email });
+        const user = await findUser(email);
 
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
@@ -99,7 +92,7 @@ export const refreshToken = async (req: Request, res: Response) => {
         console.log('decoded', decoded);
         const userId = decoded.userId;
 
-        const user = await UserModel.findById(userId);
+        const user = await findUserById(userId);
         if (!user || user.refreshToken !== refreshToken) {
             return res.status(401).json({ msg: 'Invalid refresh token' });
         }
@@ -107,6 +100,9 @@ export const refreshToken = async (req: Request, res: Response) => {
         const accessToken = generateToken(userId);
         res.json({ accessToken });
     } catch (err: any) {
+        if (err.message === 'Invalid token') {
+            return res.status(401).json({ msg: 'Invalid token' });
+        }
         console.error(err.message);
         res.status(500).send('Server error');
     }
@@ -123,22 +119,28 @@ export const confirmEmail = async (req: Request, res: Response) => {
 
     try {
         const decoded = verifyEmailToken(token as string) as any;
+        if(!decoded){
+            return res.status(400).json({ msg: 'Invalid token' });
+        }
         console.log('emaildecoded', decoded);
         const userId = decoded.userId;
 
-        const user = await UserModel.findById(userId);
+        const user = await findUserById(userId);
         console.log('user', user);
         if (!user) {
             return res.status(400).json({ msg: 'Invalid token' });
         }
-
+        
         user.isEmailConfirmed = true;
         await user.save();
 
         res.json({ msg: 'Email confirmed successfully' });
     } catch (err:any) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        console.error('Error confirming email:', err.message);
+        if (err.message === 'Invalid or expired token') {
+            return res.status(400).json({ msg: 'Invalid token' });
+        }
+        res.status(500).json({ msg: 'Server error' });
     }
 };
 

@@ -12,3 +12,13 @@ export const dbConnect= async()=>{
         process.exit(1);
     }
 }
+
+export const dbDisconnect= async()=>{
+    try {
+        await mongoose.disconnect();
+        console.log(`MongoDB disconnected`);
+    } catch (error: any) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+}

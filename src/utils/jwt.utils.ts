@@ -11,7 +11,12 @@ export const generateToken=(userId: string)=>
 }
 
 export const verifyToken=(token: string)=>{
+    try{
     return jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+    }
+    catch(error){
+        throw new Error('Invalid token');
+    }
 }
 
 export const generateRefreshToken=(userId: string)=>{

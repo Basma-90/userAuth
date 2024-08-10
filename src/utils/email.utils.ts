@@ -25,5 +25,9 @@ export const generateEmailToken = (userId: string) => {
 }
 
 export const verifyEmailToken = (token: string) => {
-    return jwt.verify(token, process.env.EMAIL_SECRET!);
-}
+    try {
+        return jwt.verify(token, process.env.EMAIL_SECRET!);
+    } catch (error) {
+        throw new Error('Invalid or expired token');
+    }
+};
