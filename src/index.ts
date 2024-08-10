@@ -5,6 +5,8 @@ import authRoutes from './routes/user.routes';
 import { dbConnect } from './configDB/dbConfig';
 import nodeMailer from 'nodemailer';
 import { Request, Response, RequestHandler } from 'express';
+import { swaggerUi,swaggerDocs } from './swagger';
+
 
 
 const logRequestTime: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -25,6 +27,8 @@ bodyPrser.urlencoded({ extended: true });
 app.use(express.json());
 app.use(cookieParser());
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 app.get('/', (req, res) => {
     setTimeout(() => {
@@ -36,4 +40,6 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 
-app.listen(3000, () => console.log(`Server running on port 3000`));
+const server = app.listen(3000, () => console.log(`Server running on port 3000`));
+
+export default server;
