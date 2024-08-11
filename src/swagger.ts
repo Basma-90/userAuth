@@ -6,7 +6,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            title: 'https://userauth-60c0.up.railway.app',
+            title: 'http://userauth-60c0.up.railway.app',
             version: '1.0.0',
         },
         servers: [
