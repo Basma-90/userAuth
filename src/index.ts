@@ -1,6 +1,6 @@
 import express, { NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
-import bodyPrser from 'body-parser';
+import bodyParser from 'body-parser';
 import authRoutes from './routes/user.routes';
 import { dbConnect } from './configDB/dbConfig';
 import nodeMailer from 'nodemailer';
@@ -21,13 +21,21 @@ const logRequestTime: RequestHandler = (req: Request, res: Response, next: NextF
 
 dbConnect();
 const app = express();
-app.use(bodyPrser.json());
-app.use(logRequestTime);
-bodyPrser.urlencoded({ extended: true });
-app.use(express.json());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/auth', authRoutes);
+
+app.get('/swagger.json', (req, res) => {
+    res.json(swaggerDocs);
+});
+
+app.get('/swagger.json', (req, res) => {
+    res.json(swaggerDocs);
+});
 
 
 app.get('/', (req, res) => {
