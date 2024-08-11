@@ -11,7 +11,22 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: User name
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User email
+ *               password:
+ *                 type: string
+ *                 description: User password
+ *             required:
+ *               - name
+ *               - email
+ *               - password
  *     responses:
  *       200:
  *         description: User registered successfully. Returns a token.
@@ -25,7 +40,8 @@ const router = Router();
  *       400:
  *         description: User already exists or validation error
  */
-router.post('/register',register);
+router.post('/register', register);
+
 /**
  * @openapi
  * /auth/login:

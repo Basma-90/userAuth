@@ -1,5 +1,6 @@
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { refreshToken } from './controllers/user.controller';
 
 const swaggerOptions: swaggerJsDoc.Options = {
     swaggerDefinition: {
@@ -10,8 +11,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000',
-                description: 'Local server',
+                url: 'userauth-60c0.up.railway.app',
             },
         ],
         components: {
@@ -32,14 +32,14 @@ const swaggerOptions: swaggerJsDoc.Options = {
                             type: 'string',
                             description: 'Password of the user',
                         },
-                        isEmailConfirmed: {
+                        isEmialConfirmed: {
                             type: 'boolean',
-                            description: 'Status of email confirmation',
+                            description: 'Email confirmation status',
                             default: false,
                         },
                         refreshToken: {
                             type: 'string',
-                            description: 'Refresh token associated with the user',
+                            description: 'JWT Refresh Token',
                         },
                     },
                     required: ['name', 'email', 'password'],
